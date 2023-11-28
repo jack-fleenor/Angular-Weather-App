@@ -1,0 +1,9 @@
+<div>
+  @if (this.weather && this.weather.length !== 0) {
+    <ul style="max-height: 750px; overflow: scroll; list-style-type: none; padding: 0">
+      @for (forecast of this.weather; track forecast.number) {
+        <app-weather-section-item [forecast]="forecast"></app-weather-section-item>
+      }
+    </ul>
+  }
+</div>

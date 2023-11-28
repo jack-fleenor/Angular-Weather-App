@@ -1,0 +1,32 @@
+<div class="card">
+  <div class="card-body">
+    <form [formGroup]="addr" (ngSubmit)="submitAddr()">
+      <div class="mb-3">
+        <label for="addr_one" class="form-label">Address Line One:</label>
+        <input id="addr_one" formControlName="addr_one" class="form-control" />
+      </div>
+
+      <div class="mb-3">
+        <label for="addr_two" class="form-label">Address Line Two:</label>
+        <input id="addr_two" formControlName="addr_two" class="form-control" />
+      </div>
+      <div style="display: flex; flex-direction: row; justify-content: space-between;">
+        <div class="mb-3" style="width: 45%;">
+          <label for="addr_city" class="form-label">City:</label>
+          <input id="addr_city" formControlName="addr_city" class="form-control" />
+        </div>
+        <div class="mb-3" style="width: 45%;">
+          <label for="addr_state" class="form-label">State</label>
+          <select id="addr_state" formControlName="addr_state" class="form-select">
+            @for (state of this.statesKeys; track state) {
+            <option [value]="this.states[state]">{{ state }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+
+</div>
