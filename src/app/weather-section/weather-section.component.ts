@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { ApiResponse } from '../types/noaaApiResponse';
 import { WeatherSectionItemComponent } from '../weather-section-item/weather-section-item.component';
+import { WeatherApiService } from '../services/weather-api.service';
+import { ForecastPeriod } from '../types/noaaApiResponse';
 
 @Component({
   selector: 'app-weather-section',
@@ -13,29 +13,16 @@ import { WeatherSectionItemComponent } from '../weather-section-item/weather-sec
 })
 export class WeatherSectionComponent {
   @Input() userLatAndLong: { lat: number, long: number } | null = null;
-  weather: Array<ApiResponse> | null = null;
-  constructor(private http: HttpClient){
-  }
+  weather: Array<ForecastPeriod> | null = null;
+  constructor(private weatherService: WeatherApiService){}
   ngOnChanges(){
     this.fetchWeather()
   }
-  fetchWeather(){
+  async fetchWeather(){
     if (this.userLatAndLong !== null) {
-      this.http.get<any>('https://api.weather.gov/points/' + this.userLatAndLong.lat + ',' + this.userLatAndLong.long).subscribe({
-        next: (data) => {
-          this.http.get<any>(data.properties.forecast).subscribe({
-            next: (data) => {
-              this.weather = data.properties.periods;
-            }
-          })
-        },
-        error: (error) => {
-            console.log(error)
-        },
-        complete: () => {
-            console.log('complete')
-        }
-      });
+      this.weather = await this.weatherService.fetchForecast(
+        this.userLatAndLong.lat, this.userLatAndLong.long
+      ) 
     }
   }
   
